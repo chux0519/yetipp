@@ -5,10 +5,13 @@
 class YetiFrame : public wxFrame
 {
 public:
-    YetiFrame();
+	YetiFrame();
 
 private:
-    void OnHello(wxCommandEvent& event);
-    void OnExit(wxCommandEvent& event);
-    void OnAbout(wxCommandEvent& event);
+	void OnPaste(wxCommandEvent& event);
+	void OnExit(wxCommandEvent& event);
+	void OnAbout(wxCommandEvent& event);
+
+	wxStaticBitmap* sbm;
+	wxChoice* scaleChoice;
 };
