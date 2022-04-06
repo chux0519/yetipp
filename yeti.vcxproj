@@ -21,10 +21,12 @@
   <ItemGroup>
     <ClInclude Include="YetiApp.h" />
     <ClInclude Include="YetiFrame.h" />
+    <ClInclude Include="YetiTess.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YetiApp.cpp" />
     <ClCompile Include="YetiFrame.cpp" />
+    <ClCompile Include="YetiTess.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

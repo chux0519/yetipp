@@ -1,11 +1,13 @@
 #pragma once
 
 #include <wx/wx.h>
+#include "YetiTess.h"
 
 class YetiFrame : public wxFrame
 {
 public:
 	YetiFrame();
+	~YetiFrame();
 
 private:
 	void OnPaste(wxCommandEvent& event);
@@ -13,5 +15,8 @@ private:
 	void OnAbout(wxCommandEvent& event);
 
 	wxStaticBitmap* sbm;
-	wxChoice* scaleChoice;
+	wxStaticText* ocrText;
+
+
+	YetiTess* tess;
 };

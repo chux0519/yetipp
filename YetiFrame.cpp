@@ -35,26 +35,26 @@ YetiFrame::YetiFrame()
 	wxPanel* panel = new wxPanel(this);
 	wxBoxSizer* boxSizer = new wxBoxSizer(wxVERTICAL);
 	sbm = new wxStaticBitmap(panel, wxID_ANY, wxNullBitmap);
-	scaleChoice = new wxChoice(panel, wxID_ANY);
-	SetClientSize({ 300, 300 });
 
-	scaleChoice->Append("Scale_None", reinterpret_cast<void*>(wxStaticBitmap::Scale_None));
-	scaleChoice->Append("Scale_Fill", reinterpret_cast<void*>(wxStaticBitmap::Scale_Fill));
-	scaleChoice->Append("Scale_AspectFit", reinterpret_cast<void*>(wxStaticBitmap::Scale_AspectFit));
-	scaleChoice->Append("Scale_AspectFill", reinterpret_cast<void*>(wxStaticBitmap::Scale_AspectFill));
-	scaleChoice->SetSelection(0);
-	scaleChoice->Bind(wxEVT_CHOICE, [&](wxCommandEvent& e) {
-		sbm->SetScaleMode(static_cast<wxStaticBitmap::ScaleMode>(reinterpret_cast<long long>(scaleChoice->GetClientData(scaleChoice->GetSelection()))));
-		});
+	ocrText = new wxStaticText(panel, wxID_ANY, "No Output Yet", { 10, 10 });
 
-	boxSizer->Add(scaleChoice, 0, wxALIGN_CENTER | wxTOP | wxLEFT | wxRIGHT, 20);
-	boxSizer->Add(sbm, 1, wxGROW | wxALL, 20);
+
+	// boxSizer->Add(scaleChoice, 0, wxALIGN_CENTER | wxTOP | wxLEFT | wxRIGHT, 20);
+	boxSizer->Add(sbm, 0, wxGROW | wxALL, 20);
+	boxSizer->Add(ocrText, 1, wxALIGN_CENTER | wxTOP | wxLEFT | wxRIGHT, 20);
 
 	sbm->SetScaleMode(wxStaticBitmap::Scale_AspectFit);
 	
-	sbm->SetWindowStyle(wxBORDER_SIMPLE);
+	// sbm->SetWindowStyle(wxBORDER_SIMPLE);
 	wxInitAllImageHandlers();
 	panel->SetSizerAndFit(boxSizer);
+
+	tess = new YetiTess();
+}
+
+YetiFrame::~YetiFrame() {
+	delete tess;
+	delete sbm;
 }
 
 void YetiFrame::OnExit(wxCommandEvent& event)
@@ -81,13 +81,17 @@ void YetiFrame::OnPaste(wxCommandEvent& event)
 			wxBitmap bitmap = data.GetBitmap();
 			int w = bitmap.GetWidth();
 			int h = bitmap.GetHeight();
+			int d = bitmap.GetDepth();
 
-			SetClientSize({ w + 40, h + 60 });
+			SetClientSize({ w + 40, h + 40 });
 			sbm->SetBitmap({ bitmap });
 
 			wxString status;
-			status << status.Format("%d x %d", w, h);
+			status << status.Format("%d x %d, color depth: %d", w, h, d);
 			SetStatusText(status);
+			
+			wxString ocrRes = tess->OCR(&bitmap);
+			ocrText->SetLabelText(ocrRes);
 		}
 		wxTheClipboard->Close();
 	}
