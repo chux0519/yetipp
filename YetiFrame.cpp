@@ -83,7 +83,6 @@ void YetiFrame::OnPaste(wxCommandEvent& event)
 			int h = bitmap.GetHeight();
 			int d = bitmap.GetDepth();
 
-			SetClientSize({ w + 40, h + 40 });
 			sbm->SetBitmap({ bitmap });
 
 			wxString status;
@@ -92,6 +91,8 @@ void YetiFrame::OnPaste(wxCommandEvent& event)
 			
 			wxString ocrRes = tess->OCR(&bitmap);
 			ocrText->SetLabelText(ocrRes);
+
+			SetClientSize({ w + 40, h * 2 + 40 });
 		}
 		wxTheClipboard->Close();
 	}
